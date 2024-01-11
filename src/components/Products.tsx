@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Navbar from "./Navbar";
+import OfferTime from "./OfferTime";
+
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // New loading state
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const location = useLocation();
-  const category = location.state.category;
-  console.log(category);
+  const category = location.state?.category;
 
   const getProducts = async () => {
     try {
@@ -18,7 +20,7 @@ const Products = () => {
       );
       const products = await productsJson.json();
       setProducts(products);
-      // console.log(products);
+      setLoading(false); // Set loading to false when products are loaded
     } catch (error) {
       console.error(error);
     }
@@ -27,23 +29,32 @@ const Products = () => {
   useEffect(() => {
     getProducts();
   }, []);
-  console.log(category);
+
   return (
     <>
       <Navbar />
-      <h1 className="mt-24 text-lg font-bold ml-16">
+      <OfferTime />
+      <h1 className="mt-4 text-lg font-bold ml-16">
         {location.state?.category}
       </h1>
-      <div className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-4"} p-3`}>
-        {products
-          .filter((product: any) => product.category.name.includes(category))
-          .map((product: any) => {
-            return (
+      {loading ? (
+        // Render a loading state or spinner while products are being fetched
+        <p>Loading products...</p>
+      ) : (
+        <div
+          className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-4"} p-3 `}
+        >
+          {products
+            .filter(
+              (product: any) =>
+                !location.state ||
+                product.category.name === location.state.category
+            )
+            .map((product: any) => (
               <div
                 key={product.id}
-                className=" bg-gray-100 w-60 h-52 mb-28 m-auto"
+                className=" bg-gray-100 w-60 h-52 mb-28 m-auto mt-5"
               >
-                {/* <img src={product.images[0]} alt="product" className="p-2" /> */}
                 <Carousel
                   autoPlay={true}
                   infiniteLoop={true}
@@ -52,16 +63,13 @@ const Products = () => {
                   className="w-60 h-52"
                 >
                   <div>
-                    <img src={product.images[0]} />
-                    {/* <p className="legend">Legend 1</p> */}
+                    <img src={product.images[0]} alt="product" />
                   </div>
                   <div>
-                    <img src={product.images[1]} />
-                    {/* <p className="legend">Legend 2</p> */}
+                    <img src={product.images[1]} alt="product" />
                   </div>
                   <div>
-                    <img src={product.images[2]} />
-                    {/* <p className="legend">Legend 3</p> */}
+                    <img src={product.images[2]} alt="product" />
                   </div>
                 </Carousel>
                 <div className="flex flex-col items-start ml-4">
@@ -80,9 +88,9 @@ const Products = () => {
                   </div>
                 </div>
               </div>
-            );
-          })}
-      </div>
+            ))}
+        </div>
+      )}
     </>
   );
 };

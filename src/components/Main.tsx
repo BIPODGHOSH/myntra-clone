@@ -1,6 +1,7 @@
 import Banner from "./Banner";
 import Home from "./Home";
 import Navbar from "./Navbar";
+import Products from "./Products";
 
 const Main = () => {
   return (
@@ -9,6 +10,7 @@ const Main = () => {
       <div className=" mt-5">
         <Banner />
         <Home />
+        <Products />
       </div>
     </div>
   );
