@@ -5,6 +5,7 @@ import lens from "../assets/images/lens.png";
 import account from "../assets/images/account.png";
 import heart from "../assets/images/heart.png";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -22,16 +23,20 @@ const Navbar: React.FC = () => {
 
   return (
     <div
-      className={`flex items-center text-xs font-bold ${
+      className={`flex items-center text-xs mt-0 font-bold ${
         isMobile ? "gap-2" : "gap-8"
       } p-4 pl-8 text-gray-700  fixed z-10 bg-white w-full`}
-      style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)" }}
+      style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", top: 0 }}
     >
-      <img
-        src={logo}
-        alt="logo"
-        className={isMobile ? "w-10 h-6" : "w-20 h-12"}
-      />
+      {
+        <Link to="/">
+          <img
+            src={logo}
+            alt="logo"
+            className={isMobile ? "w-10 h-6" : "w-20 h-12"}
+          />
+        </Link>
+      }
       {isMobile && (
         <div className="border border-gray-300 flex items-center rounded bg-gray-100 pl-2 ml-0 font-normal">
           <img src={lens} alt="lens" className="h-3 w-3" />
@@ -135,12 +140,17 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex gap-6 items-center ml-3">
-            <div className="flex flex-col items-center">
-              <img src={account} alt="account" className="h-5 w-5" />
-              <h1 className="font-bold" style={{ fontSize: "11px" }}>
-                Profile
-              </h1>
-            </div>
+            {
+              <Link to="/login">
+                {" "}
+                <div className="flex flex-col items-center">
+                  <img src={account} alt="account" className="h-5 w-5" />
+                  <h1 className="font-bold" style={{ fontSize: "11px" }}>
+                    Profile
+                  </h1>
+                </div>
+              </Link>
+            }
             <div className="flex flex-col items-center cursor-pointer">
               <img src={heart} alt="heart" className="h-4 w-4" />
               <h1 className="font-bold" style={{ fontSize: "11px" }}>

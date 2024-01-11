@@ -4,6 +4,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { auth } from "../firebase";
 import Navbar from "./Navbar";
+import { redirect } from "react-router-dom";
 
 const Login = () => {
   const [phone, setPhone] = useState("");
@@ -28,6 +29,7 @@ const Login = () => {
     try {
       await user.confirm(otp);
       setOtp("");
+      return redirect("/");
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +39,6 @@ const Login = () => {
   return (
     <>
       <Navbar />
-
       <div className="flex items-center flex-col h-screen w-screen bg-rose-50 pt-28">
         <div
           className=" h-full bg-white"
